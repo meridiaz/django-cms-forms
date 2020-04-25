@@ -30,7 +30,7 @@ def get_content(request, llave):
         titulo = request.POST['titulo']
         cuerpo = request.POST['cuerpo']
         q = Comentario(contenido=c, titulo=titulo, cuerpo=cuerpo,
-                        fecha=timezone.now())
+                       fecha=timezone.now())
         q.save()
 
     contenido = get_object_or_404(Contenido, clave=llave)
@@ -112,7 +112,7 @@ def comentario_new(request, llave):
             comentario = form.save(commit=False)
             comentario.fecha = timezone.now()
             contenido.comentario_set.create(titulo=comentario.titulo,
-                            cuerpo=comentario.cuerpo, fecha=comentario.fecha)
+                              cuerpo=comentario.cuerpo, fecha=comentario.fecha)
 
             return redirect('get_content', llave=contenido.clave)
     else:
