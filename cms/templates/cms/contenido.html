@@ -4,6 +4,7 @@
           <p  class="lead"> {{ contenido.valor }} </p>
           {% if user.is_authenticated %}
               <button type="button"  class="btn btn-light"><a href="{% url 'cms_modify' llave=contenido.clave %}">Modificar contenido</span></a></button>
+              <button type="button"  class="btn btn-light"><a href="{% url 'comentario_new' llave=contenido.clave%}">Añadir un nuevo comentario</span></a></button>
           {% endif %}
           <hr  class="my-4">
             <div  class="content container">
@@ -16,6 +17,9 @@
                             </div>
                             <h2>{{ comentario.titulo }}</h2>
                             <p>{{ comentario.cuerpo|linebreaksbr }}</p>
+                            {% if user.is_authenticated %}
+                                <button type="button"  class="btn btn-light"><a href="{% url 'comentario_modify' llave=contenido.clave titulo_comen=comentario.titulo%}">Modificar comentario</span></a></button>
+                            {% endif %}
                         </div>
                     {% endfor %}
                     </div>
