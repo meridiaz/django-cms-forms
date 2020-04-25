@@ -1,0 +1,22 @@
+{% load static %}
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'cms/bootstrap.min.css' %}">
+
+    <title>CMS de CursosWeb</title>
+  </head>
+  <body>
+    <div  class="jumbotron">
+        {% block contenido %}
+        {% endblock %}
+     </div>
+     {% if user.is_authenticated %}
+        <button type="button"  class="btn btn-light"><a href="{% url 'cms_new' %}">Añadir un nuevo contenido</span></a></button>
+      {% endif %}
+  </body>
+</html>
