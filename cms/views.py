@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.template import loader
 from django.contrib.auth import logout
 
-from .forms import ContenidoForm
+from .forms import ContenidoForm, ComentarioForm
 from .models import Contenido, Comentario
 
 @csrf_exempt
@@ -68,7 +68,6 @@ def cms_new(request):
 
 def cms_modify(request, llave):
     contenido = get_object_or_404(Contenido, clave=llave)
-    print(contenido)
     if request.method == "POST":
         form = ContenidoForm(request.POST, instance=contenido)
         if form.is_valid():
@@ -78,3 +77,33 @@ def cms_modify(request, llave):
         #muestra el formulario con los datos que ya tiene contenido
         form = ContenidoForm(instance=contenido)
     return render(request, 'cms/cms_edit.html', {'form': form})
+
+def comentario_modify(request, llave, titulo_comen):
+    contenido = get_object_or_404(Contenido, clave=llave)
+    comentario = get_object_or_404(Comentario, titulo=titulo_comen)
+    if request.method == "POST":
+        form = ComentarioForm(request.POST, instance=comentario)
+        if form.is_valid():
+            comentario = form.save(commit=False)
+            comentario.fecha = timezone.now()
+            comentario.save()
+
+            return redirect('get_content', llave=contenido.clave)
+    else:
+        #muestra el formulario con los datos que ya tiene contenido
+        form = ComentarioForm(instance=comentario)
+    return render(request, 'cms/comentario_edit.html', {'form': form})
+
+def comentario_new(request, llave):
+    contenido = get_object_or_404(Contenido, clave=llave)
+    if request.method == "POST":
+        form = ComentarioForm(request.POST)
+        if form.is_valid():
+            comentario = form.save(commit=False)
+            comentario.fecha = timezone.now()
+            contenido.comentario_set.create(titulo=comentario.titulo, cuerpo=comentario.cuerpo, fecha=comentario.fecha)
+
+            return redirect('get_content', llave=contenido.clave)
+    else:
+        form = ComentarioForm()
+    return render(request, 'cms/comentario_edit.html', {'form': form})
